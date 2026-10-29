@@ -11,12 +11,12 @@ import {
 } from '../../lib/format';
 
 export const CHART = {
-  forecast: '#74e5d9',
-  actual: '#eeeade',
-  over: '#e89b4b',
-  under: '#3fd4c5',
-  grid: 'rgba(238,234,222,0.075)',
-  axis: '#758684',
+  forecast: '#2b4bf2',
+  actual: '#171511',
+  over: '#df4b16',
+  under: '#0f9b8e',
+  grid: 'rgba(23,21,17,0.08)',
+  axis: '#8f8677',
 };
 
 export const axisTick = {
@@ -28,7 +28,7 @@ export const axisTick = {
 
 export function TooltipShell({ children }: { children: ReactNode }) {
   return (
-    <div className="min-w-[13rem] border border-teal-500/25 bg-ink-950/95 p-3 shadow-lift backdrop-blur-md">
+    <div className="min-w-[13rem] rounded-[1.1rem] border border-paper/10 bg-ink-850/95 p-3.5 shadow-lift backdrop-blur-xl">
       {children}
     </div>
   );

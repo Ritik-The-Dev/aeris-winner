@@ -25,6 +25,13 @@ const toneClasses: Record<Tone, string> = {
   rust: 'text-rust',
 };
 
+const iconToneClasses: Record<Tone, string> = {
+  teal: 'bg-teal-300/10 text-teal-300',
+  amber: 'bg-amber-400/10 text-amber-300',
+  paper: 'bg-paper/[0.06] text-paper',
+  rust: 'bg-rust/10 text-rust',
+};
+
 export function Kpi({
   label,
   value,
@@ -54,25 +61,37 @@ export function Kpi({
             : formatNumber(Math.abs(value), digits);
 
   return (
-    <div className="group relative flex min-h-[9.5rem] flex-col justify-between border-l border-paper/10 px-4 py-4 first:border-l-0 md:px-5">
-      <div className="flex items-start justify-between gap-2">
+    <div className="group relative flex min-h-[10rem] flex-col justify-between overflow-hidden rounded-[1.4rem] border border-paper/10 bg-ink-850/70 px-4 py-4 shadow-insetline transition-all duration-300 hover:-translate-y-1 hover:border-teal-300/25 hover:bg-ink-900 hover:shadow-soft md:px-5">
+      <span
+        className="pointer-events-none absolute -right-8 -top-10 h-24 w-24 rounded-full bg-teal-300/10 blur-2xl transition-opacity duration-300 group-hover:opacity-100"
+        aria-hidden="true"
+      />
+      <div className="relative flex items-start justify-between gap-2">
         <span className="label text-dim">{label}</span>
-        {Icon && <Icon size={14} strokeWidth={1.5} className="text-dim/70" aria-hidden="true" />}
+        {Icon && (
+          <span
+            className={`flex h-7 w-7 items-center justify-center rounded-full ${iconToneClasses[tone]}`}
+          >
+            <Icon size={13} strokeWidth={1.8} aria-hidden="true" />
+          </span>
+        )}
       </div>
-      <div className="mt-5">
+      <div className="relative mt-5">
         <div
-          className={`font-mono text-[clamp(1.65rem,3vw,2.55rem)] font-medium leading-none tracking-[-0.06em] tabular-nums ${toneClasses[tone]}`}
+          className={`font-mono text-[clamp(1.55rem,2.8vw,2.35rem)] font-medium leading-none tracking-[-0.06em] tabular-nums ${toneClasses[tone]}`}
           aria-label={`${label}: ${display}`}
         >
           {display}
         </div>
-        <p className="mt-3 max-w-[24ch] text-[0.72rem] leading-relaxed text-mist/80">{definition}</p>
+        <p className="mt-3 max-w-[24ch] text-[0.7rem] leading-relaxed text-mist/85">{definition}</p>
         {footnote && (
-          <p className="mt-1 font-mono text-[0.6rem] uppercase tracking-[0.1em] text-dim">{footnote}</p>
+          <p className="mt-1 font-mono text-[0.58rem] uppercase tracking-[0.1em] text-dim">
+            {footnote}
+          </p>
         )}
       </div>
       <span
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-px scale-x-0 bg-current opacity-40 transition-transform duration-500 group-hover:scale-x-100"
+        className="pointer-events-none absolute inset-x-4 bottom-0 h-px origin-left scale-x-0 bg-teal-300/60 transition-transform duration-500 group-hover:scale-x-100"
         aria-hidden="true"
       />
     </div>
@@ -81,7 +100,7 @@ export function Kpi({
 
 export function KpiStrip({ children }: { children: ReactNode }) {
   return (
-    <div className="grid grid-cols-2 border-y border-paper/10 bg-ink-900/40 md:grid-cols-3 xl:grid-cols-5">
+    <div className="grid grid-cols-2 gap-2 rounded-[2rem] border border-paper/10 bg-ink-900/35 p-2 shadow-insetline md:grid-cols-3 xl:grid-cols-5">
       {children}
     </div>
   );
@@ -97,7 +116,7 @@ export function MiniMetric({
   tone?: Tone;
 }) {
   return (
-    <div className="min-w-0">
+    <div className="min-w-0 rounded-[0.9rem] bg-ink-900/45 px-3 py-2.5">
       <div className="label text-dim">{label}</div>
       <div className={`mt-1 font-mono text-sm tabular-nums ${toneClasses[tone]}`}>{value}</div>
     </div>

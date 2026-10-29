@@ -70,18 +70,18 @@ export function DiurnalChart({ diurnal }: { diurnal: DiurnalPoint[] }) {
               tickFormatter={(value: number) => `${Math.round(value / 1000)}`}
               tickCount={4}
             />
-            <ReferenceLine y={0} stroke="rgba(238,234,222,0.22)" />
-            <Tooltip content={<DiurnalTooltip />} cursor={{ fill: 'rgba(238,234,222,0.04)' }} />
+            <ReferenceLine y={0} stroke="rgba(23,21,17,0.22)" />
+            <Tooltip content={<DiurnalTooltip />} cursor={{ fill: 'rgba(23,21,17,0.04)' }} />
             <Bar
               dataKey="mae_mw"
               name="MAE"
               barSize={10}
-              radius={[1, 1, 0, 0]}
+              radius={[4, 4, 0, 0]}
               isAnimationActive={!reduced}
               animationDuration={600}
             >
               {diurnal.map((point) => (
-                <Cell key={point.hour} fill="rgba(63,212,197,0.42)" />
+                <Cell key={point.hour} fill="rgba(15,155,142,0.34)" />
               ))}
             </Bar>
             <Line

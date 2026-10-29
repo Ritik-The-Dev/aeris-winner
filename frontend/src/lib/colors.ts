@@ -19,14 +19,14 @@ function mix(from: string, to: string, amount: number): string {
   return `#${channels.join('')}`;
 }
 
-const NEUTRAL = '#10262e';
-const UNDER = '#3fd4c5';
-const OVER = '#e89b4b';
-const EXTREME = '#b9563f';
+const NEUTRAL = '#c7bca9';
+const UNDER = '#0f9b8e';
+const OVER = '#ff6a33';
+const EXTREME = '#c92a2a';
 
-/** Sequential diverging scale: teal for underforecast, amber/rust for overforecast. */
+/** Sequential diverging scale: green for underforecast, coral/red for overforecast. */
 export function errorColour(error: number | null, maxAbsoluteError: number): string {
-  if (error === null || Number.isNaN(error)) return '#1a2c33';
+  if (error === null || Number.isNaN(error)) return '#ded6c7';
   const intensity = Math.min(Math.abs(error) / Math.max(maxAbsoluteError, 1), 1);
   if (error >= 0) {
     const amount = Math.pow(intensity, 0.72);

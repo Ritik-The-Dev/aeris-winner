@@ -1,4 +1,4 @@
-import {
+﻿import {
   Component,
   Suspense,
   lazy,
@@ -107,29 +107,36 @@ export function WindfieldStage({
         </Suspense>
       </SceneBoundary>
       {!ready && (
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-ink-950/55">
-          <span className="font-mono text-[0.62rem] uppercase tracking-[0.18em] text-teal-200">
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center rounded-[1.5rem] bg-ink-950/55 backdrop-blur-[2px]">
+          <span className="rounded-full border border-paper/10 bg-ink-950/80 px-3 py-1.5 font-mono text-[0.6rem] uppercase tracking-[0.16em] text-teal-200 shadow-soft">
             Plotting {field.cells.length.toLocaleString('en-GB')} intervals…
           </span>
         </div>
       )}
       <div
-        className="pointer-events-none absolute left-3 top-3 flex items-center gap-2 border border-teal-300/20 bg-ink-950/80 px-2.5 py-1.5 backdrop-blur"
+        className="pointer-events-none absolute left-3 top-3 flex items-center gap-2 rounded-full border border-teal-300/20 bg-ink-950/80 px-3 py-1.5 shadow-soft backdrop-blur"
         aria-live="polite"
       >
-        <span className="font-mono text-[0.52rem] uppercase tracking-[0.16em] text-dim">
+        <span className="h-1.5 w-1.5 rounded-full bg-teal-300" aria-hidden="true" />
+        <span className="font-mono text-[0.5rem] uppercase tracking-[0.14em] text-dim">
           Selected ridge
         </span>
-        <span className="font-mono text-[0.62rem] uppercase tracking-[0.1em] text-teal-200">
+        <span className="font-mono text-[0.58rem] uppercase tracking-[0.08em] text-teal-200">
           {formatDateWithWeekday(`${selectedDay}T12:00:00Z`)}
         </span>
       </div>
-      <div className="pointer-events-none absolute inset-x-3 bottom-3 flex flex-wrap items-center justify-between gap-2">
-        <span className="bg-ink-950/75 px-2 py-1 font-mono text-[0.55rem] uppercase tracking-[0.14em] text-dim backdrop-blur">
-          Drag to orbit · click a ridge
-        </span>
-        <span className="hidden items-center gap-2 bg-ink-950/75 px-2 py-1 font-mono text-[0.55rem] uppercase tracking-[0.12em] text-dim backdrop-blur sm:flex">
-          <i className="h-px w-4 bg-amber-300" aria-hidden="true" />
+      <div
+        className={`pointer-events-none absolute inset-x-3 bottom-3 flex flex-wrap items-center gap-2 ${
+          compact ? 'justify-between' : 'justify-end'
+        }`}
+      >
+        {compact && (
+          <span className="rounded-full bg-ink-950/80 px-2.5 py-1 font-mono text-[0.52rem] uppercase tracking-[0.12em] text-dim shadow-soft backdrop-blur">
+            Drag to orbit · click a ridge
+          </span>
+        )}
+        <span className="hidden items-center gap-2 rounded-full bg-ink-950/80 px-2.5 py-1 font-mono text-[0.52rem] uppercase tracking-[0.1em] text-dim shadow-soft backdrop-blur sm:flex">
+          <i className="h-1.5 w-1.5 rounded-full bg-amber-400" aria-hidden="true" />
           Forecast surface
         </span>
       </div>

@@ -68,10 +68,11 @@ export function FilterBar() {
     : undefined;
 
   return (
-    <div className="border-b border-paper/10 bg-ink-950/70">
-      <div className="mx-auto flex max-w-[1560px] flex-col gap-4 px-4 py-3.5 sm:px-6 lg:flex-row lg:items-end lg:justify-between lg:px-8">
-        <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end">
-          <div>
+    <div className="relative z-30 px-3 pt-3 sm:px-4 lg:px-6">
+      <div className="mx-auto max-w-[1560px] rounded-[1.4rem] border border-paper/10 bg-ink-950/75 p-2.5 shadow-soft backdrop-blur-xl sm:p-3">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+          <div className="grid grid-cols-2 items-end gap-2 sm:flex sm:flex-row sm:flex-wrap sm:items-end sm:gap-3">
+          <div className="col-span-2 sm:col-span-1">
             <p className="label flex items-center gap-2 text-dim">
               <CalendarRange size={11} aria-hidden="true" />
               Decision window
@@ -124,7 +125,7 @@ export function FilterBar() {
 
           <button
             type="button"
-            className="btn-primary"
+            className="btn-primary w-full sm:w-auto"
             onClick={() => apply()}
             disabled={invalid || (!dirty && !refreshing)}
           >
@@ -132,7 +133,7 @@ export function FilterBar() {
             Apply
           </button>
 
-          <div className="flex items-center gap-1 pb-0.5">
+          <div className="col-span-2 flex items-center gap-1 pb-0.5 sm:col-span-1">
             <button
               type="button"
               className={`chip ${isPreset(preset.month) ? 'chip-active' : ''}`}
@@ -152,7 +153,7 @@ export function FilterBar() {
               className={`chip ${isPreset(preset.lastWeek) ? 'chip-active' : ''}`}
               onClick={() => apply(preset.lastWeek)}
             >
-              Week 31
+              Week 5
             </button>
           </div>
         </div>
@@ -190,11 +191,12 @@ export function FilterBar() {
           )}
         </div>
       </div>
-      {invalid && (
-        <p className="mx-auto max-w-[1560px] px-4 pb-3 font-mono text-[0.64rem] uppercase tracking-[0.1em] text-amber-300 sm:px-6 lg:px-8">
-          Enter a valid window inside 1–31 January 2026, with the cutoff as HH:MM.
-        </p>
-      )}
+        {invalid && (
+          <p className="mt-2 font-mono text-[0.62rem] uppercase tracking-[0.1em] text-amber-300">
+            Enter a valid window inside 1–31 January 2026, with the cutoff as HH:MM.
+          </p>
+        )}
+      </div>
     </div>
   );
 }

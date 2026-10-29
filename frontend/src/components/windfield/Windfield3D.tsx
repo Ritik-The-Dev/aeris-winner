@@ -27,6 +27,7 @@ export default function Windfield3D({
   const hostRef = useRef<HTMLDivElement>(null);
   const onSelectRef = useRef(onSelectDay);
   const indicatorRef = useRef<THREE.Group | null>(null);
+  const highlightRef = useRef<THREE.Group | null>(null);
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
@@ -51,7 +52,7 @@ export default function Windfield3D({
     }
 
     const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x04090c, 0.0065);
+    scene.fog = new THREE.FogExp2(0xf3eee3, 0.0058);
     const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 400);
     const target = new THREE.Vector3(0, 7.5, 0);
     const radius = 74;
@@ -63,7 +64,7 @@ export default function Windfield3D({
     let lastY = 0;
     let frame = 0;
 
-    renderer.setClearColor(0x04090c, 0);
+    renderer.setClearColor(0xf3eee3, 0);
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
     host.appendChild(renderer.domElement);
@@ -72,14 +73,14 @@ export default function Windfield3D({
     renderer.domElement.style.height = '100%';
     renderer.domElement.style.touchAction = 'none';
 
-    scene.add(new THREE.HemisphereLight(0x9cefe4, 0x04090c, 2.1));
-    const key = new THREE.DirectionalLight(0xfff4dc, 2.6);
+    scene.add(new THREE.HemisphereLight(0xfffdf7, 0xd8cfbf, 1.45));
+    const key = new THREE.DirectionalLight(0xfff2dd, 1.9);
     key.position.set(28, 48, 22);
     scene.add(key);
-    const rim = new THREE.PointLight(0x1fb9ac, 130, 140, 2);
+    const rim = new THREE.PointLight(0x2b4bf2, 55, 150, 2);
     rim.position.set(-36, 24, -28);
     scene.add(rim);
-    const warm = new THREE.PointLight(0xe89b4b, 65, 100, 2);
+    const warm = new THREE.PointLight(0xff6a33, 32, 120, 2);
     warm.position.set(34, 12, -30);
     scene.add(warm);
 
@@ -156,20 +157,58 @@ export default function Windfield3D({
     const actualGeometry = buildSurface('actual');
     const actualMaterial = new THREE.MeshStandardMaterial({
       vertexColors: true,
-      roughness: 0.72,
-      metalness: 0.16,
-      transparent: true,
-      opacity: 0.96,
+      roughness: 0.82,
+      metalness: 0.02,
       side: THREE.DoubleSide,
     });
     const actualMesh = new THREE.Mesh(actualGeometry, actualMaterial);
     group.add(actualMesh);
 
+    // A cobalt trace and marker make the selected ridge legible against the
+    // coloured surface, not just in the adjacent date pill.
+    const highlights = new THREE.Group();
+    field.days.forEach((day, dayIndex) => {
+      const row = grid[dayIndex] ?? [];
+      const points = row
+        .map((cell, intervalIndex) => {
+          if (cell?.actual === null || cell?.actual === undefined) return null;
+          return new THREE.Vector3(
+            -WIDTH / 2 + intervalIndex * cellW,
+            heightFor(cell.actual) + 0.42,
+            zForDay(dayIndex),
+          );
+        })
+        .filter((point): point is THREE.Vector3 => point !== null);
+      if (!points.length) return;
+      const ridge = new THREE.Group();
+      const line = new THREE.Line(
+        new THREE.BufferGeometry().setFromPoints(points),
+        new THREE.LineBasicMaterial({
+          color: 0x2b4bf2,
+          transparent: true,
+          opacity: 0.9,
+        }),
+      );
+      line.renderOrder = 2;
+      ridge.add(line);
+      const marker = new THREE.Mesh(
+        new THREE.SphereGeometry(0.38, 12, 12),
+        new THREE.MeshBasicMaterial({ color: 0x2b4bf2 }),
+      );
+      marker.position.copy(points[0]);
+      marker.position.x -= 0.7;
+      ridge.add(marker);
+      ridge.visible = day === selectedDay;
+      highlights.add(ridge);
+    });
+    group.add(highlights);
+    highlightRef.current = highlights;
+
     const wireMaterial = new THREE.MeshBasicMaterial({
-      color: 0x9cefe4,
+      color: 0x2b4bf2,
       wireframe: true,
       transparent: true,
-      opacity: 0.055,
+      opacity: 0.05,
       depthWrite: false,
     });
     const wireMesh = new THREE.Mesh(actualGeometry, wireMaterial);
@@ -178,29 +217,29 @@ export default function Windfield3D({
 
     const forecastGeometry = buildSurface('forecast');
     const forecastMaterial = new THREE.MeshBasicMaterial({
-      color: 0xf0bb78,
+      color: 0xff6a33,
       wireframe: true,
       transparent: true,
-      opacity: 0.2,
+      opacity: 0.1,
       depthWrite: false,
     });
     const forecastMesh = new THREE.Mesh(forecastGeometry, forecastMaterial);
     forecastMesh.position.y = 0.16;
     group.add(forecastMesh);
 
-    const gridHelper = new THREE.GridHelper(WIDTH + 10, 32, 0x1d414b, 0x10262e);
+    const gridHelper = new THREE.GridHelper(WIDTH + 10, 32, 0xbcb2a2, 0xe4dccd);
     gridHelper.position.y = -0.18;
     const gridMaterial = gridHelper.material as THREE.Material;
     gridMaterial.transparent = true;
-    gridMaterial.opacity = 0.42;
+    gridMaterial.opacity = 0.38;
     group.add(gridHelper);
 
     const base = new THREE.Mesh(
       new THREE.PlaneGeometry(WIDTH + 10, DEPTH + 10),
       new THREE.MeshBasicMaterial({
-        color: 0x061116,
+        color: 0xefe8dc,
         transparent: true,
-        opacity: 0.55,
+        opacity: 0.7,
         side: THREE.DoubleSide,
       }),
     );
@@ -212,9 +251,9 @@ export default function Windfield3D({
     const indicatorPlane = new THREE.Mesh(
       new THREE.PlaneGeometry(WIDTH + 3, Math.max(cellD * 0.92, 1.2)),
       new THREE.MeshBasicMaterial({
-        color: 0x74e5d9,
+        color: 0x2b4bf2,
         transparent: true,
-        opacity: 0.14,
+        opacity: 0.1,
         side: THREE.DoubleSide,
         depthWrite: false,
       }),
@@ -229,7 +268,7 @@ export default function Windfield3D({
     ];
     const outline = new THREE.LineLoop(
       new THREE.BufferGeometry().setFromPoints(outlinePoints),
-      new THREE.LineBasicMaterial({ color: 0x74e5d9, transparent: true, opacity: 0.55 }),
+      new THREE.LineBasicMaterial({ color: 0x2b4bf2, transparent: true, opacity: 0.55 }),
     );
     outline.position.y = 0.02;
     indicator.add(outline);
@@ -256,10 +295,10 @@ export default function Windfield3D({
     const particleGeometry = new THREE.BufferGeometry();
     particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     const particleMaterial = new THREE.PointsMaterial({
-      color: 0xa8f2e8,
-      size: 0.24,
+      color: 0x2b4bf2,
+      size: 0.22,
       transparent: true,
-      opacity: 0.6,
+      opacity: 0.36,
       sizeAttenuation: true,
       depthWrite: false,
     });
@@ -285,7 +324,7 @@ export default function Windfield3D({
       if (!context) return null;
       context.clearRect(0, 0, canvas.width, canvas.height);
       context.font = '600 25px "IBM Plex Mono", ui-monospace, monospace';
-      context.fillStyle = 'rgba(206, 232, 228, 0.82)';
+      context.fillStyle = 'rgba(23, 21, 17, 0.64)';
       context.textAlign = 'center';
       context.textBaseline = 'middle';
       context.fillText(text, canvas.width / 2, canvas.height / 2 + 1);
@@ -426,6 +465,7 @@ export default function Windfield3D({
       renderer.domElement.removeEventListener('pointerup', onPointerUp);
       renderer.domElement.removeEventListener('pointerleave', onPointerLeave);
       indicatorRef.current = null;
+      highlightRef.current = null;
       scene.traverse((object) => {
         if (
           object instanceof THREE.Mesh ||
@@ -457,6 +497,9 @@ export default function Windfield3D({
     const dayCount = Math.max(field.days.length, 1);
     const cellD = DEPTH / Math.max(dayCount - 1, 1);
     indicator.position.z = -DEPTH / 2 + index * cellD;
+    highlightRef.current?.children.forEach((ridge, ridgeIndex) => {
+      ridge.visible = field.days[ridgeIndex] === selectedDay;
+    });
   }, [selectedDay, field.days]);
 
   if (failed) {

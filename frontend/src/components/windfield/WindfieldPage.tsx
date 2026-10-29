@@ -70,8 +70,8 @@ export function WindfieldPage() {
           </h1>
           <p className="mt-5 max-w-[64ch] text-sm leading-relaxed text-mist">
             Each ridge is a delivery day; each point along it is a half-hour. The surface
-            shows actual national wind, the amber wireframe shows what the selected
-            forecast expected, and colour shows the signed error.
+            shows actual national wind, the cobalt trace marks the selected day, the coral
+            wireframe shows the forecast, and colour shows the signed error.
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2 lg:flex-col lg:items-end">
@@ -112,7 +112,7 @@ export function WindfieldPage() {
           </div>
         </div>
 
-        <div className="relative bg-[radial-gradient(ellipse_at_50%_40%,rgba(31,185,172,0.1),transparent_62%)]">
+        <div className="relative bg-[radial-gradient(ellipse_at_50%_40%,rgba(255,106,51,0.12),transparent_62%)]">
           {mode === 'scene' ? (
             <WindfieldStage
               field={field}
@@ -142,7 +142,7 @@ export function WindfieldPage() {
           </div>
           <div className="flex items-center gap-2">
             <span className="font-mono text-[0.55rem] uppercase tracking-[0.12em] text-dim">Under</span>
-            <span className="h-1.5 w-24 bg-[linear-gradient(90deg,#3fd4c5,#10262e_52%,#e89b4b,#b9563f)]" aria-hidden="true" />
+            <span className="h-1.5 w-24 rounded-full bg-[linear-gradient(90deg,#0f9b8e,#d8d0c1_52%,#ff6a33,#c92a2a)]" aria-hidden="true" />
             <span className="font-mono text-[0.55rem] uppercase tracking-[0.12em] text-dim">Over</span>
           </div>
         </div>
@@ -158,7 +158,7 @@ export function WindfieldPage() {
               </h2>
               <p className="mt-1.5 max-w-[50ch] text-xs leading-relaxed text-mist/85">
                 Each cell is one delivery interval. Click a cell to open its full vintage
-                trail. Teal below zero is underforecast; amber above zero is overforecast.
+                trail. Green below zero is underforecast; coral above zero is overforecast.
               </p>
             </div>
             <span className="font-mono text-[0.58rem] uppercase tracking-[0.12em] text-dim">

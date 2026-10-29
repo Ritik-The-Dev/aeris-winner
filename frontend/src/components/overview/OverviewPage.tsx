@@ -177,7 +177,7 @@ export function OverviewPage() {
           <ChartFrame
             eyebrow="Half-hourly"
             title="Forecast and outturn"
-            description={`${formatNumber(summary.points.length)} delivery intervals on ${day}. Dashed teal is the selected forecast; paper is metered outturn.`}
+            description={`${formatNumber(summary.points.length)} delivery intervals on ${day}. Dashed cobalt is the selected forecast; black is metered outturn.`}
             action={<DaySelector daily={data.daily} value={day} onChange={setSelectedDay} />}
             footer={
               <>

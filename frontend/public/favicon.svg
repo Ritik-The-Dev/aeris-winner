@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="7" fill="#04090c"/>
-  <path d="M3 23.5c5.6 0 5.8-14 11.7-14 4.4 0 5.2 10.5 9.6 10.5 2.1 0 3.2-1.8 4.7-4" fill="none" stroke="#74e5d9" stroke-width="1.6" stroke-linecap="round"/>
-  <path d="M3 16.2c4.1 0 4.7-7.3 8.7-7.3 3.5 0 4.2 8.4 8.1 8.4 2.7 0 3.7-4 6.2-4" fill="none" stroke="#eeeade" stroke-opacity="0.55" stroke-width="0.9" stroke-linecap="round"/>
-  <path d="M3 8.4c2.7 0 3.2-2.6 5.4-2.6" fill="none" stroke="#eeeade" stroke-opacity="0.3" stroke-width="0.9" stroke-linecap="round"/>
-  <circle cx="27.8" cy="23.5" r="1.6" fill="#74e5d9"/>
+  <rect width="32" height="32" rx="9" fill="#171511"/>
+  <path d="M3 23.5c5.6 0 5.8-14 11.7-14 4.4 0 5.2 10.5 9.6 10.5 2.1 0 3.2-1.8 4.7-4" fill="none" stroke="#f3eee3" stroke-width="1.6" stroke-linecap="round"/>
+  <path d="M3 16.2c4.1 0 4.7-7.3 8.7-7.3 3.5 0 4.2 8.4 8.1 8.4 2.7 0 3.7-4 6.2-4" fill="none" stroke="#f3eee3" stroke-opacity="0.55" stroke-width="0.9" stroke-linecap="round"/>
+  <path d="M3 8.4c2.7 0 3.2-2.6 5.4-2.6" fill="none" stroke="#f3eee3" stroke-opacity="0.3" stroke-width="0.9" stroke-linecap="round"/>
+  <circle cx="27.8" cy="23.5" r="1.6" fill="#d7f75b"/>
 </svg>

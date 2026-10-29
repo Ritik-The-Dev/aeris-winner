@@ -62,16 +62,16 @@ export function DailyChart({
               tickFormatter={(value: number) => `${Math.round(value / 1000)}`}
               tickCount={4}
             />
-            <ReferenceLine y={0} stroke="rgba(238,234,222,0.22)" />
+            <ReferenceLine y={0} stroke="rgba(23,21,17,0.22)" />
             <Tooltip
               content={<DailyTooltip />}
-              cursor={{ fill: 'rgba(238,234,222,0.04)' }}
+              cursor={{ fill: 'rgba(23,21,17,0.04)' }}
             />
             <Bar
               dataKey="mae_mw"
               name="MAE"
               barSize={12}
-              radius={[1, 1, 0, 0]}
+              radius={[4, 4, 0, 0]}
               isAnimationActive={!reduced}
               animationDuration={650}
               onClick={(entry) => {
@@ -84,10 +84,10 @@ export function DailyChart({
                 const fill = selected
                   ? CHART.forecast
                   : point.bias_mw !== null && point.bias_mw > 400
-                    ? 'rgba(232,155,75,0.46)'
+                    ? 'rgba(223,75,22,0.38)'
                     : point.bias_mw !== null && point.bias_mw < -400
-                      ? 'rgba(63,212,197,0.4)'
-                      : 'rgba(238,234,222,0.18)';
+                      ? 'rgba(15,155,142,0.34)'
+                      : 'rgba(23,21,17,0.12)';
                 return <Cell key={point.delivery_date} fill={fill} />;
               })}
             </Bar>

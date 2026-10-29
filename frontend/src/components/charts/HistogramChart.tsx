@@ -54,13 +54,13 @@ export function HistogramChart({ histogram }: { histogram: Histogram }) {
               width={32}
               tickCount={4}
             />
-            <ReferenceLine x={0} stroke="rgba(238,234,222,0.4)" strokeDasharray="2 3" />
-            <Tooltip content={<HistogramTooltip />} cursor={{ fill: 'rgba(238,234,222,0.04)' }} />
+            <ReferenceLine x={0} stroke="rgba(23,21,17,0.35)" strokeDasharray="2 3" />
+            <Tooltip content={<HistogramTooltip />} cursor={{ fill: 'rgba(23,21,17,0.04)' }} />
             <Bar
               dataKey="count"
               name="Intervals"
               barSize={12}
-              radius={[1, 1, 0, 0]}
+              radius={[4, 4, 0, 0]}
               isAnimationActive={!reduced}
               animationDuration={650}
             >

@@ -12,7 +12,7 @@ export function LoadingState({
 }) {
   return (
     <div
-      className={`flex items-center gap-3 border border-paper/10 bg-ink-900/50 px-4 py-3 text-mist ${
+      className={`flex items-center gap-3 rounded-[1rem] border border-paper/10 bg-ink-900/50 px-4 py-3 text-mist ${
         compact ? 'text-xs' : 'text-sm'
       }`}
       role="status"
@@ -40,7 +40,7 @@ export function ErrorState({
 }) {
   return (
     <div
-      className={`border border-rust/40 bg-rust/5 ${compact ? 'p-3' : 'p-5'}`}
+      className={`rounded-[1.1rem] border border-rust/40 bg-rust/5 ${compact ? 'p-3' : 'p-5'}`}
       role="alert"
     >
       <div className="flex items-start gap-3">
@@ -64,7 +64,7 @@ export function ErrorState({
 
 export function EmptyState({ children }: { children: ReactNode }) {
   return (
-    <div className="border border-dashed border-paper/15 px-5 py-10 text-center">
+    <div className="rounded-[1.1rem] border border-dashed border-paper/15 px-5 py-10 text-center">
       <p className="font-mono text-[0.66rem] uppercase tracking-[0.16em] text-dim">
         No rows to display
       </p>
@@ -159,7 +159,7 @@ export function ChartFrame({
 
 export function SourceNote({ source }: { source: SourceInfo }) {
   return (
-    <div className="flex flex-col gap-3 border border-paper/10 bg-ink-900/40 p-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="flex flex-col gap-3 rounded-[1.1rem] border border-paper/10 bg-ink-900/40 p-4 sm:flex-row sm:items-center sm:justify-between">
       <div className="min-w-0">
         <p className="label text-dim">Provenance</p>
         <p className="mt-1.5 text-xs leading-relaxed text-mist">

@@ -80,7 +80,7 @@ export function ForecastChart({ points }: { points: SeriesPoint[] }) {
               strokeDasharray="4 3"
               fill="url(#forecast-fill)"
               dot={false}
-              activeDot={{ r: 2.8, fill: CHART.forecast, stroke: '#04090c', strokeWidth: 1.5 }}
+              activeDot={{ r: 2.8, fill: CHART.forecast, stroke: '#fffdf7', strokeWidth: 1.5 }}
               isAnimationActive={!reduced}
               animationDuration={700}
             />
@@ -92,7 +92,7 @@ export function ForecastChart({ points }: { points: SeriesPoint[] }) {
               strokeWidth={1.6}
               fill="url(#actual-fill)"
               dot={false}
-              activeDot={{ r: 2.8, fill: CHART.actual, stroke: '#04090c', strokeWidth: 1.5 }}
+              activeDot={{ r: 2.8, fill: CHART.actual, stroke: '#fffdf7', strokeWidth: 1.5 }}
               isAnimationActive={!reduced}
               animationDuration={700}
             />
@@ -115,10 +115,10 @@ export function ForecastChart({ points }: { points: SeriesPoint[] }) {
             <ComposedChart data={chartData} margin={{ top: 2, right: 6, left: 0, bottom: 0 }}>
               <XAxis dataKey="label" hide />
               <YAxis hide domain={['auto', 'auto']} />
-              <ReferenceLine y={0} stroke="rgba(238,234,222,0.24)" strokeWidth={1} />
+              <ReferenceLine y={0} stroke="rgba(23,21,17,0.24)" strokeWidth={1} />
               <Tooltip
                 content={<ForecastTooltip />}
-                cursor={{ fill: 'rgba(238,234,222,0.04)' }}
+                cursor={{ fill: 'rgba(23,21,17,0.04)' }}
               />
               <Bar dataKey="error_mw" isAnimationActive={!reduced} animationDuration={600}>
                 {chartData.map((point) => (
@@ -126,7 +126,7 @@ export function ForecastChart({ points }: { points: SeriesPoint[] }) {
                     key={point.start_time}
                     fill={
                       point.error_mw === null
-                        ? '#1a2c33'
+                        ? '#d9d0c0'
                         : point.error_mw >= 0
                           ? CHART.over
                           : CHART.under

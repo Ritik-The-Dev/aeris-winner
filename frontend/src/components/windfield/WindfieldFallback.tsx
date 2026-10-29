@@ -39,12 +39,12 @@ export function WindfieldFallback({
           viewBox={`0 0 ${width} ${height}`}
           className="block h-auto w-full min-w-[680px]"
           role="img"
-          aria-label="Half-hourly wind forecast error by delivery day and time of day. Teal is underforecast; amber is overforecast."
+          aria-label="Half-hourly wind forecast error by delivery day and time of day. Green is underforecast; coral is overforecast."
         >
           <defs>
             <linearGradient id="fallback-fade" x1="0" x2="1">
-              <stop offset="0" stopColor="#04090c" stopOpacity="0" />
-              <stop offset="1" stopColor="#04090c" stopOpacity="0.28" />
+              <stop offset="0" stopColor="#f3eee3" stopOpacity="0" />
+              <stop offset="1" stopColor="#f3eee3" stopOpacity="0.28" />
             </linearGradient>
           </defs>
 
@@ -69,9 +69,9 @@ export function WindfieldFallback({
                     width={plotWidth + 4}
                     height={cellHeight + 2}
                     fill="none"
-                    stroke="#eeeade"
-                    strokeOpacity="0.65"
-                    strokeWidth="1"
+                    stroke="#171511"
+                    strokeOpacity="0.7"
+                    strokeWidth="1.2"
                   />
                 )}
                 {row.map((cell) => (
@@ -129,7 +129,7 @@ export function WindfieldFallback({
       <div className="mt-3 flex flex-wrap items-center justify-between gap-3 border-t border-paper/10 pt-3">
         <div className="flex items-center gap-2">
           <span className="font-mono text-[0.58rem] uppercase tracking-[0.14em] text-dim">Under</span>
-          <span className="h-2 w-24 bg-[linear-gradient(90deg,#3fd4c5,#10262e_52%,#e89b4b,#b9563f)]" aria-hidden="true" />
+          <span className="h-2 w-24 rounded-full bg-[linear-gradient(90deg,#0f9b8e,#d8d0c1_52%,#ff6a33,#c92a2a)]" aria-hidden="true" />
           <span className="font-mono text-[0.58rem] uppercase tracking-[0.14em] text-dim">Over</span>
         </div>
         <p className="font-mono text-[0.58rem] uppercase tracking-[0.12em] text-dim">
