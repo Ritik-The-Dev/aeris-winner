@@ -12,11 +12,9 @@ backend, Docker, tests, and a reproducible Elexon snapshot.
 
 ![AERIS landing page](docs/landing.png)
 
-> **Deployment status.** This application is fully containerised and was verified locally in
-> production mode, but it is **not currently deployed to a public URL**. No hosting account,
-> CLI session, or repository credentials were available in the build environment. Docker,
-> Heroku, and a single-project Vercel Services configuration are included and documented below.
-> No deployment is claimed that did not happen.
+> **Deployment status.** Live at **[https://aeris.ritik.biz/](https://aeris.ritik.biz/)**.
+> It runs on Vercel as one project with two services: FastAPI at `/api/*` and the Vite SPA at
+> `/*`. Docker and Heroku container alternatives remain documented below.
 
 ---
 
@@ -373,10 +371,12 @@ includes a healthcheck, and serves the compiled frontend from FastAPI.
 
 ### Status
 
-**Not deployed.** The original build environment had no Heroku, Vercel, or GitHub CLI, and no
-account credentials were available. A deployed URL and public repository cannot be truthfully
-claimed. Everything needed to deploy is now committed, including a single-project Vercel
-Services configuration that builds both the FastAPI and Vite services.
+**Live:** [https://aeris.ritik.biz/](https://aeris.ritik.biz/)
+
+The project is deployed as one Vercel project with two services. `/` and `/overview` serve the
+Vite SPA; `/api/health`, `/api/overview`, and `/api/docs` are served by FastAPI. The deployment
+was verified against the production URL: `/api/overview` returns MAE **2,016.313 MW** and
+**1,488 matched intervals**.
 
 ### Heroku (container stack)
 

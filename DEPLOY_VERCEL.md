@@ -205,4 +205,10 @@ frontend at `/` and the backend at `/api/*`, just like production. The existing 
       `/api/overview`.
 - [ ] The real deployment URL is recorded in `README.md`.
 
-No public URL is claimed here until the project is actually deployed and the checks above pass.
+## 8. Live deployment
+
+**Live URL:** [https://aeris.ritik.biz/](https://aeris.ritik.biz/)
+
+The production deployment was verified at this URL: `/` and `/overview` return the SPA,
+`/api/health` returns `200`, `/api/docs` returns `200`, and `/api/overview` returns MAE
+**2,016.313 MW** with **1,488 matched intervals**.
