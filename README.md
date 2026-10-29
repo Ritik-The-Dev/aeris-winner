@@ -556,18 +556,6 @@ Verified at 1440 px desktop and 390 px mobile across all six routes:
 
 ---
 
-## AI tool disclosure
-
-This submission was built with an **AI coding agent: OpenCode, using the DeepSeek V4.1 Flash
-Free model**, under human direction and review. The agent wrote application code, tests, data
-tooling, and documentation; the human operator set the requirements, reviewed methodological
-choices, ran the application, and approved the result. No other AI tools were used.
-
-All displayed data is real Elexon data. No synthetic or fabricated values are used to fill gaps,
-and no deployment, test result, or video is claimed unless it actually occurred.
-
----
-
 ## Attribution
 
 - Forecast and outturn data: **Elexon BMRS** (`WINDFOR`, `FUELHH`), publicly available.

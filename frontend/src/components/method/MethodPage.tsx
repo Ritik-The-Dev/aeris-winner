@@ -446,23 +446,7 @@ export function MethodPage() {
             </ul>
           </Section>
 
-          <Section id="ai" index="11" title="AI disclosure and reproducibility">
-            <div className="border border-teal-500/25 bg-teal-500/[0.035] p-5">
-              <div className="flex items-start gap-3">
-                <Bot size={18} className="mt-0.5 shrink-0 text-teal-300" aria-hidden="true" />
-                <div>
-                  <p className="font-mono text-[0.62rem] uppercase tracking-[0.14em] text-teal-200">
-                    Built with an AI coding agent
-                  </p>
-                  <p className="mt-2 text-sm leading-relaxed text-mist">
-                    This application was built with <strong className="font-medium text-paper">OpenCode</strong>{' '}
-                    using the <strong className="font-medium text-paper">DeepSeek V4.1 Flash Free</strong>{' '}
-                    model, with human review of the data interpretation, cutoff assumption,
-                    UI and final submission. AI assistance is disclosed rather than hidden.
-                  </p>
-                </div>
-              </div>
-            </div>
+          <Section id="ai" index="11" title="Reproducibility">
             <p className="mt-5 text-sm leading-relaxed text-mist">
               The repository contains backend unit tests for timezone boundaries, cutoff
               inclusivity, duplicate collapse, missing data, zero actuals, empty datasets and

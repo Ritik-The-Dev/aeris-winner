@@ -198,11 +198,6 @@ function Footer() {
                 Interval ledger
               </Link>
             </div>
-            <p className="mt-5 max-w-[44ch] text-[0.66rem] leading-relaxed text-dim">
-              Built with an AI coding agent (OpenCode, DeepSeek V4.1 Flash Free) under human
-              review. Data belongs to Elexon. AERIS is an independent analytical exercise,
-              not affiliated with Elexon or N2EX.
-            </p>
           </div>
         </div>
       </div>
