@@ -88,11 +88,20 @@ class DiskCache:
             return None
 
     def save(self, payload: dict[str, Any]) -> None:
-        self.directory.mkdir(parents=True, exist_ok=True)
-        temp = self.path.with_suffix(".tmp")
-        with gzip.open(temp, "wt", encoding="utf-8", compresslevel=6) as handle:
-            json.dump(payload, handle, separators=(",", ":"))
-        temp.replace(self.path)
+        """Best-effort cache write.
+
+        Serverless platforms such as Vercel expose a read-only project
+        filesystem. A cache write failure must not turn a successful upstream
+        fetch into a misleading snapshot fallback.
+        """
+        try:
+            self.directory.mkdir(parents=True, exist_ok=True)
+            temp = self.path.with_suffix(".tmp")
+            with gzip.open(temp, "wt", encoding="utf-8", compresslevel=6) as handle:
+                json.dump(payload, handle, separators=(",", ":"))
+            temp.replace(self.path)
+        except OSError as exc:
+            logger.warning("Could not write Elexon cache %s: %s", self.path, exc)
 
 
 class SnapshotStore:

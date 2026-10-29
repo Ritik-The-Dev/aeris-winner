@@ -20,6 +20,10 @@ static/
 .env.*
 !.env.example
 
+# Vercel CLI local state
+.vercel/
+backend/.vercel/
+
 # Operating system / editor
 .DS_Store
 Thumbs.db

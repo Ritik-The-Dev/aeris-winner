@@ -14,9 +14,9 @@ backend, Docker, tests, and a reproducible Elexon snapshot.
 
 > **Deployment status.** This application is fully containerised and was verified locally in
 > production mode, but it is **not currently deployed to a public URL**. No hosting account,
-> CLI session, or repository credentials were available in the build environment. The Docker
-> and Heroku configuration needed to deploy is included and documented below. No deployment
-> is claimed that did not happen.
+> CLI session, or repository credentials were available in the build environment. Docker,
+> Heroku, and a single-project Vercel Services configuration are included and documented below.
+> No deployment is claimed that did not happen.
 
 ---
 
@@ -262,7 +262,9 @@ configuration to get wrong in production.
 │  ├─ app/                  FastAPI application and analysis engine
 │  ├─ data/                 verified January 2026 Elexon snapshot
 │  ├─ scripts/              reproducible snapshot builder
-│  └─ tests/                40 backend tests
+│  ├─ tests/                40 backend tests
+│  ├─ requirements.txt      Python runtime dependencies
+│  └─ .python-version       Python 3.13 pin for the backend service
 ├─ frontend/
 │  ├─ src/components/       landing, overview, wind field, accuracy, intervals, method
 │  ├─ src/context/          shared filters, data fetching, interval selection
@@ -272,6 +274,8 @@ configuration to get wrong in production.
 ├─ Dockerfile               multi-stage production build
 ├─ docker-compose.yml       one-command local container
 ├─ heroku.yml               Heroku container deployment
+├─ vercel.json              Vercel Services: backend + frontend, shared routing
+├─ DEPLOY_VERCEL.md         Vercel Services deployment guide
 ├─ .github/workflows/ci.yml backend tests, frontend checks, Docker build
 ├─ .env.example             all runtime settings, no secrets
 └─ DEMO.md                  10-minute demo script
@@ -334,6 +338,7 @@ All settings use the `AERIS_` prefix. See `.env.example`. There are **no secrets
 | `AERIS_ALLOW_SNAPSHOT_FALLBACK` | `true` | Use the verified snapshot if Elexon fails |
 | `AERIS_CACHE_TTL_SECONDS` | `21600` | Disk/memory cache lifetime (6 hours) |
 | `AERIS_CORS_ORIGINS` | localhost origins | Comma-separated allowed browser origins |
+| `AERIS_CORS_ORIGIN_REGEX` | empty | Optional regex for preview origins, e.g. `https://.*\.vercel\.app` |
 | `AERIS_STATIC_DIR` | `static` | Built SPA directory |
 | `AERIS_CACHE_DIR` | `backend/.cache` | Upstream cache directory |
 | `AERIS_LOG_LEVEL` | `INFO` | Log verbosity |
@@ -368,9 +373,10 @@ includes a healthcheck, and serves the compiled frontend from FastAPI.
 
 ### Status
 
-**Not deployed.** The build environment had no Heroku, Vercel, or GitHub CLI, and no account
-credentials were available. A deployed URL and public repository cannot be truthfully claimed.
-Everything needed to deploy is committed and tested.
+**Not deployed.** The original build environment had no Heroku, Vercel, or GitHub CLI, and no
+account credentials were available. A deployed URL and public repository cannot be truthfully
+claimed. Everything needed to deploy is now committed, including a single-project Vercel
+Services configuration that builds both the FastAPI and Vite services.
 
 ### Heroku (container stack)
 
@@ -393,11 +399,53 @@ The same image runs on Render, Railway, Fly.io, or any Docker host. Expose the i
 set `AERIS_CORS_ORIGINS` to the public origin, and keep `AERIS_ALLOW_SNAPSHOT_FALLBACK=true`
 so a transient Elexon outage degrades to the labelled snapshot instead of an empty screen.
 
-### Vercel note
+### Vercel (one project, two services)
 
-Vercel is a good fit for the static frontend but not for this long-lived FastAPI service
-without a separate backend deployment. No untested Vercel configuration is included. The
-single-container Heroku path is the supported deployment route.
+The repository is configured for **one Vercel project with two services** sharing one domain:
+
+| Service | Root directory | Runtime / build | Public path |
+|---|---|---|---|
+| `backend` | `backend` | FastAPI on Vercel Functions | `/api/*` |
+| `frontend` | `frontend` | Vite static build → `dist` | everything else |
+
+`vercel.json` is the single source of truth. The top-level `services` block configures each
+service, and the top-level `rewrites` expose only the paths each one needs. Services are
+internal by default; these rewrites are the public ingress:
+
+```json
+{
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": { "service": "backend" } },
+    { "source": "/(.*)", "destination": { "service": "frontend" } }
+  ]
+}
+```
+
+The backend receives the original `/api/...` path and its existing FastAPI routes match
+unchanged. The frontend is a static Vite bundle; its client calls the same-origin relative
+`/api` path, so **no `VITE_API_BASE_URL` is needed** and no browser CORS configuration is
+required. `backend/requirements.txt`, `backend/.python-version`, and the `backend/data` snapshot
+are bundled inside the `backend` service.
+
+**No service bindings are used.** The frontend does not make server-side calls: the browser
+calls the public same-origin `/api` rewrite. The backend does not call the frontend. A runtime
+binding would only be appropriate if one service called another from server-side function code.
+
+**Full step-by-step instructions, environment variables, routing, and troubleshooting:**
+[`DEPLOY_VERCEL.md`](DEPLOY_VERCEL.md).
+
+Recommended environment variables (Vercel project settings):
+
+```text
+AERIS_ENVIRONMENT=production
+AERIS_DATA_MODE=snapshot
+AERIS_ALLOW_SNAPSHOT_FALLBACK=true
+AERIS_CACHE_DIR=/tmp/aeris-cache
+```
+
+Do not set `VITE_API_BASE_URL` for the Services deployment; leave it empty so the client keeps
+using `/api`. The public project URL serves `/` from the frontend, `/api/health` and
+`/api/overview` from the backend, and `/api/docs` for interactive API documentation.
 
 ---
 

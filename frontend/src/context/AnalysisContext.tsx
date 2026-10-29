@@ -38,22 +38,30 @@ interface AnalysisContextValue {
 
 const AnalysisContext = createContext<AnalysisContextValue | null>(null);
 
-function readFilters(params: URLSearchParams): Filters {
-  const start = params.get('from') ?? DEFAULT_START;
-  const end = params.get('to') ?? DEFAULT_END;
-  const cutoff = params.get('cutoff') ?? DEFAULT_CUTOFF;
+function readFilters(from: string | null, to: string | null, cutoff: string | null): Filters {
+  const start = from ?? DEFAULT_START;
+  const end = to ?? DEFAULT_END;
+  const cutoffTime = cutoff ?? DEFAULT_CUTOFF;
   const validDate = /^\d{4}-\d{2}-\d{2}$/;
   const validCutoff = /^([01]\d|2[0-3]):[0-5]\d$/;
   return {
     start_date: validDate.test(start) ? start : DEFAULT_START,
     end_date: validDate.test(end) ? end : DEFAULT_END,
-    cutoff_time: validCutoff.test(cutoff) ? cutoff : DEFAULT_CUTOFF,
+    cutoff_time: validCutoff.test(cutoffTime) ? cutoffTime : DEFAULT_CUTOFF,
   };
 }
 
 export function AnalysisProvider({ children }: { children: ReactNode }) {
   const [searchParams, setSearchParams] = useSearchParams();
-  const filters = useMemo(() => readFilters(searchParams), [searchParams]);
+  const fromParam = searchParams.get('from');
+  const toParam = searchParams.get('to');
+  const cutoffParam = searchParams.get('cutoff');
+  // Day/selection changes must not recreate the filter object: otherwise the
+  // overview request re-runs every time a ridge is clicked.
+  const filters = useMemo(
+    () => readFilters(fromParam, toParam, cutoffParam),
+    [fromParam, toParam, cutoffParam],
+  );
   const [data, setData] = useState<OverviewResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);

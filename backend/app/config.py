@@ -9,10 +9,13 @@ from typing import Literal
 from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_DATA_DIR = REPO_ROOT / "backend" / "data"
-DEFAULT_CACHE_DIR = REPO_ROOT / "backend" / ".cache"
-DEFAULT_STATIC_DIR = REPO_ROOT / "static"
+# The backend is run from the repository root locally/Docker, but as its own
+# service root inside Vercel (`backend/` becomes the function bundle root).
+# Anchor relative paths to the backend package's parent so both layouts work.
+BACKEND_ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_DATA_DIR = BACKEND_ROOT / "data"
+DEFAULT_CACHE_DIR = BACKEND_ROOT / ".cache"
+DEFAULT_STATIC_DIR = BACKEND_ROOT.parent / "static"
 
 
 class Settings(BaseSettings):
@@ -59,6 +62,8 @@ class Settings(BaseSettings):
     cors_origins: str = (
         "http://localhost:5173,http://localhost:4173,http://localhost:8000"
     )
+    # Optional regex for ephemeral preview origins, e.g. Vercel preview URLs.
+    cors_origin_regex: str = ""
     static_dir: Path = Field(default=DEFAULT_STATIC_DIR)
     log_level: str = "INFO"
 

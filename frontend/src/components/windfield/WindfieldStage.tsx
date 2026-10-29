@@ -8,6 +8,7 @@ import {
 } from 'react';
 import type { ErrorInfo, ReactNode } from 'react';
 import type { WindField } from '../../lib/analysis';
+import { formatDateWithWeekday } from '../../lib/format';
 import { WindfieldFallback } from './WindfieldFallback';
 import { LoadingState } from '../ui/States';
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion';
@@ -112,9 +113,20 @@ export function WindfieldStage({
           </span>
         </div>
       )}
+      <div
+        className="pointer-events-none absolute left-3 top-3 flex items-center gap-2 border border-teal-300/20 bg-ink-950/80 px-2.5 py-1.5 backdrop-blur"
+        aria-live="polite"
+      >
+        <span className="font-mono text-[0.52rem] uppercase tracking-[0.16em] text-dim">
+          Selected ridge
+        </span>
+        <span className="font-mono text-[0.62rem] uppercase tracking-[0.1em] text-teal-200">
+          {formatDateWithWeekday(`${selectedDay}T12:00:00Z`)}
+        </span>
+      </div>
       <div className="pointer-events-none absolute inset-x-3 bottom-3 flex flex-wrap items-center justify-between gap-2">
         <span className="bg-ink-950/75 px-2 py-1 font-mono text-[0.55rem] uppercase tracking-[0.14em] text-dim backdrop-blur">
-          Drag to orbit · click a day
+          Drag to orbit · click a ridge
         </span>
         <span className="hidden items-center gap-2 bg-ink-950/75 px-2 py-1 font-mono text-[0.55rem] uppercase tracking-[0.12em] text-dim backdrop-blur sm:flex">
           <i className="h-px w-4 bg-amber-300" aria-hidden="true" />

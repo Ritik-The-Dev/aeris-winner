@@ -266,6 +266,52 @@ export default function Windfield3D({
     const particles = new THREE.Points(particleGeometry, particleMaterial);
     group.add(particles);
 
+    // Short labels along the delivery-day axis make the ridges readable without
+    // requiring a click. They face the camera and never occlude interaction.
+    const shortDay = (value: string) =>
+      new Intl.DateTimeFormat('en-GB', {
+        day: '2-digit',
+        month: 'short',
+        timeZone: 'UTC',
+      })
+        .format(new Date(`${value}T12:00:00Z`))
+        .toUpperCase();
+
+    const makeDayLabel = (text: string) => {
+      const canvas = document.createElement('canvas');
+      canvas.width = 256;
+      canvas.height = 64;
+      const context = canvas.getContext('2d');
+      if (!context) return null;
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      context.font = '600 25px "IBM Plex Mono", ui-monospace, monospace';
+      context.fillStyle = 'rgba(206, 232, 228, 0.82)';
+      context.textAlign = 'center';
+      context.textBaseline = 'middle';
+      context.fillText(text, canvas.width / 2, canvas.height / 2 + 1);
+      const texture = new THREE.CanvasTexture(canvas);
+      texture.colorSpace = THREE.SRGBColorSpace;
+      texture.minFilter = THREE.LinearFilter;
+      const material = new THREE.SpriteMaterial({
+        map: texture,
+        transparent: true,
+        depthTest: false,
+        depthWrite: false,
+      });
+      const sprite = new THREE.Sprite(material);
+      sprite.scale.set(7.4, 1.85, 1);
+      sprite.renderOrder = 3;
+      return sprite;
+    };
+
+    field.days.forEach((day, index) => {
+      if (index !== 0 && index !== dayCount - 1 && index % 5 !== 0) return;
+      const label = makeDayLabel(shortDay(day));
+      if (!label) return;
+      label.position.set(-WIDTH / 2 - 5.2, 1.05, zForDay(index));
+      group.add(label);
+    });
+
     const updateCamera = () => {
       const horizontal = Math.cos(pitch) * radius;
       camera.position.set(
@@ -290,16 +336,18 @@ export default function Windfield3D({
 
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
-    const ground = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
-    const hit = new THREE.Vector3();
+    const pickTargets = [actualMesh, forecastMesh];
 
     const pickDay = (event: PointerEvent) => {
       const rect = renderer.domElement.getBoundingClientRect();
       pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
       pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
       raycaster.setFromCamera(pointer, camera);
-      if (!raycaster.ray.intersectPlane(ground, hit)) return;
-      const raw = (hit.z + DEPTH / 2) / Math.max(cellD, 0.001);
+      // Only an actual ridge counts. The previous ground-plane pick selected a
+      // date from any empty click, which looked like a random day change.
+      const intersection = raycaster.intersectObjects(pickTargets, false)[0];
+      if (!intersection) return;
+      const raw = (intersection.point.z + DEPTH / 2) / Math.max(cellD, 0.001);
       const index = Math.max(0, Math.min(dayCount - 1, Math.round(raw)));
       const day = field.days[index];
       if (day) onSelectRef.current(day);
@@ -379,11 +427,19 @@ export default function Windfield3D({
       renderer.domElement.removeEventListener('pointerleave', onPointerLeave);
       indicatorRef.current = null;
       scene.traverse((object) => {
-        if (object instanceof THREE.Mesh || object instanceof THREE.Points || object instanceof THREE.Line) {
+        if (
+          object instanceof THREE.Mesh ||
+          object instanceof THREE.Points ||
+          object instanceof THREE.Line ||
+          object instanceof THREE.LineSegments
+        ) {
           object.geometry?.dispose();
           const material = object.material;
           if (Array.isArray(material)) material.forEach((item) => item.dispose());
           else material?.dispose();
+        } else if (object instanceof THREE.Sprite) {
+          object.material.map?.dispose();
+          object.material.dispose();
         }
       });
       renderer.dispose();
@@ -416,7 +472,7 @@ export default function Windfield3D({
       ref={hostRef}
       className="h-full min-h-[18rem] w-full"
       role="img"
-      aria-label={`Interactive 3D wind field: ${field.matched} matched half-hour intervals. Drag to orbit and click a day to inspect it.`}
+      aria-label={`Interactive 3D wind field: ${field.matched} matched half-hour intervals, one ridge per delivery day. Drag to orbit and click a ridge to select its date.`}
     />
   );
 }
