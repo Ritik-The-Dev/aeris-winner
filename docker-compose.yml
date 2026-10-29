@@ -1,0 +1,28 @@
+services:
+  aeris:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: aeris-wind-intelligence:local
+    ports:
+      - "8000:8000"
+    environment:
+      AERIS_ENVIRONMENT: production
+      AERIS_DATA_MODE: live
+      AERIS_ALLOW_SNAPSHOT_FALLBACK: "true"
+      AERIS_CACHE_TTL_SECONDS: "21600"
+      AERIS_CORS_ORIGINS: http://localhost:8000
+      AERIS_LOG_LEVEL: INFO
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health', timeout=3)",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s

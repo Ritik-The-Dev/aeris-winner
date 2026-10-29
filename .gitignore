@@ -1,0 +1,28 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+backend/.cache/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/*.tsbuildinfo
+
+# Generated production bundle
+static/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+
+# Operating system / editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
