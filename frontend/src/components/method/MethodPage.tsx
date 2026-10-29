@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import type { ReactNode } from 'react';
-import { ArrowUpRight, Bot, Clock3, Database } from 'lucide-react';
+import { ArrowUpRight,  Clock3, Database } from 'lucide-react';
 import { useAnalysis } from '../../context/AnalysisContext';
 import { useReveal } from '../../hooks/useReveal';
 import { formatDateTimeFull, formatNumber } from '../../lib/format';
